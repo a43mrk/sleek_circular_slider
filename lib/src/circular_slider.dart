@@ -23,6 +23,7 @@ class SleekCircularSlider extends StatefulWidget {
   final OnChange onChangeStart;
   final OnChange onChangeEnd;
   final InnerWidget innerWidget;
+  final bool isDisabled;
   static const defaultAppearance = CircularSliderAppearance();
 
   double get angle {
@@ -38,7 +39,8 @@ class SleekCircularSlider extends StatefulWidget {
       this.onChange,
       this.onChangeStart,
       this.onChangeEnd,
-      this.innerWidget})
+      this.innerWidget,
+      this.isDisabled = false})
       : assert(initialValue != null),
         assert(min != null),
         assert(max != null),
@@ -64,6 +66,8 @@ class _SleekCircularSliderState extends State<SleekCircularSlider>
   SpinAnimationManager _spinManager;
   ValueChangedAnimationManager _animationManager;
 
+  bool isDisabled;
+
   bool get _interactionEnabled => (widget.onChangeEnd != null ||
       widget.onChange != null && !widget.appearance.spinnerMode);
 
@@ -72,7 +76,7 @@ class _SleekCircularSliderState extends State<SleekCircularSlider>
     super.initState();
     _startAngle = widget.appearance.startAngle;
     _angleRange = widget.appearance.angleRange;
-
+    isDisabled = widget.isDisabled;
     if (!widget.appearance.animationEnabled) {
       return;
     }
@@ -140,7 +144,7 @@ class _SleekCircularSliderState extends State<SleekCircularSlider>
     if (_painter == null) {
       _setupPainter();
     }
-    return RawGestureDetector(
+    return !isDisabled ?RawGestureDetector(
         gestures: <Type, GestureRecognizerFactory>{
           _CustomPanGestureRecognizer:
               GestureRecognizerFactoryWithHandlers<_CustomPanGestureRecognizer>(
@@ -154,7 +158,12 @@ class _SleekCircularSliderState extends State<SleekCircularSlider>
         },
         child: _buildRotatingPainter(
             rotation: _rotation,
-            size: Size(widget.appearance.size, widget.appearance.size)));
+            size: Size(widget.appearance.size, widget.appearance.size)
+          )
+        ) :_buildRotatingPainter(
+            rotation: _rotation,
+            size: Size(widget.appearance.size, widget.appearance.size)
+          );
   }
 
   @override

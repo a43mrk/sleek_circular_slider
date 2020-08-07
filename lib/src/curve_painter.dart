@@ -54,12 +54,17 @@ class _CurvePainter extends CustomPainter {
     drawCircularArc(canvas: canvas, size: size, paint: progressBarPaint);
 
     var dotPaint = Paint()..color = appearance.dotColor;
+    var dot2Paint = Paint()..shader = progressBarGradient.createShader(progressBarRect);
 
     final currentAngle = appearance.counterClockwise ? -angle : angle;
 
     Offset handler = degreesToCoordinates(
-        center, -math.pi / 2 + startAngle + currentAngle + 1.5, radius);
-    canvas.drawCircle(handler, appearance.handlerSize, dotPaint);
+        Offset(size.width / 2 -2, size.height / 2 -2), -math.pi / 2 + startAngle + currentAngle + 1.5, radius - 3);
+        /// circle at the end of pie
+        drawHandlerShadow(canvas: canvas, size: Size.fromRadius(appearance.handlerSize * 1.5), center: handler);
+        canvas.drawArc(Rect.fromCircle(center: handler, radius: appearance.handlerSize * 4), 0, math.pi * 2, false, dotPaint);
+        canvas.drawCircle(handler, appearance.handlerSize * 1.5, dot2Paint);
+        // canvas.drawCircle(handler, appearance.handlerSize, dotPaint);
   }
 
   drawCircularArc(
@@ -77,6 +82,17 @@ class _CurvePainter extends CustomPainter {
         degreeToRadians(spinnerMode ? 360 : range + currentAngle),
         false,
         paint);
+  }
+
+
+  drawHandlerShadow({@required Canvas canvas, @required Size size, Offset center}) {
+    canvas.translate(size.width/2, size.height/2); 
+    Path oval = Path()
+        ..addOval(Rect.fromCircle(center: center, radius: size.width));
+    Paint shadowPaint = Paint() 
+        ..color = Colors.black.withOpacity(0.9)
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, 8);
+    canvas.drawPath(oval, shadowPaint);
   }
 
   drawShadow({@required Canvas canvas, @required Size size}) {

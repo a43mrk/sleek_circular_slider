@@ -7,7 +7,9 @@ import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'example_page.dart';
 
 /// Example 01
-final CircularSliderAppearance appearance01 = CircularSliderAppearance();
+final CircularSliderAppearance appearance01 = CircularSliderAppearance(
+  customWidths: CustomSliderWidths(progressBarWidth: 5, handlerSize: 3, trackWidth: 5)
+);
 final viewModel01 = ExampleViewModel(
     appearance: appearance01,
     min: 0,
