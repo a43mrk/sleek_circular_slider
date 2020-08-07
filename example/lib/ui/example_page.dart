@@ -38,6 +38,7 @@ class ExamplePage extends StatelessWidget {
         child: SafeArea(
           child: Center(
               child: SleekCircularSlider(
+                child: Center(child: Text("Hi")),
             onChangeStart: (double value) {},
             onChangeEnd: (double value) {},
             innerWidget: viewModel.innerWidget,

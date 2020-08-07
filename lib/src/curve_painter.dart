@@ -35,7 +35,8 @@ class _CurvePainter extends CustomPainter {
         spinnerMode: appearance.spinnerMode);
 
     if (!appearance.hideShadow) {
-      drawShadow(canvas: canvas, size: size);
+      // drawShadow(canvas: canvas, size: size);
+      drawExtraShadow(canvas: canvas, size: size);
     }
 
     final progressBarRect = Rect.fromLTWH(0.0, 0.0, size.width, size.width);
@@ -112,6 +113,26 @@ class _CurvePainter extends CustomPainter {
       shadowPaint.color = appearance.shadowColor
           .withOpacity(maxOpacity - (opacityStep * (i - 1)));
       drawCircularArc(canvas: canvas, size: size, paint: shadowPaint);
+    }
+  }
+
+  drawExtraShadow({@required Canvas canvas, @required Size size}) {
+    final shadowStep = appearance.shadowStep != null
+        ? appearance.shadowStep
+        : math.max(
+            1, (appearance.shadowWidth - appearance.progressBarWidth) * 5);
+    final maxOpacity = math.min(1.0, appearance.shadowMaxOpacity);
+    final repetitions = math.max(1,
+        ((appearance.shadowWidth - appearance.progressBarWidth) ~/ shadowStep));
+    final opacityStep = maxOpacity / repetitions;
+    final shadowPaint = Paint()
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+    for (int i = 1; i <= repetitions; i++) {
+      shadowPaint.strokeWidth = appearance.progressBarWidth + i * shadowStep;
+      shadowPaint.color = appearance.shadowColor
+          .withOpacity(maxOpacity - (opacityStep * (i - 0.3)));
+      drawCircularArc(canvas: canvas, size: size, paint: shadowPaint, ignoreAngle: true);
     }
   }
 

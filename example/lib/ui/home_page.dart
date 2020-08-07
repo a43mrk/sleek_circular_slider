@@ -8,13 +8,16 @@ import 'example_page.dart';
 
 /// Example 01
 final CircularSliderAppearance appearance01 = CircularSliderAppearance(
-  customWidths: CustomSliderWidths(progressBarWidth: 5, handlerSize: 3, trackWidth: 5)
+  startAngle: -225,
+  angleRange: 270,
+  customColors: CustomSliderColors(progressBarColors: [Colors.indigo, Colors.indigo[200]]),
+  customWidths: CustomSliderWidths(progressBarWidth: 4, handlerSize: 3, trackWidth: 5)
 );
 final viewModel01 = ExampleViewModel(
     appearance: appearance01,
     min: 0,
     max: 100,
-    value: 60,
+    value: 50,
     pageColors: [Colors.white, HexColor('#E1C3FF')]);
 final example01 = ExamplePage(
   viewModel: viewModel01,
