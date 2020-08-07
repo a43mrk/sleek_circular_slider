@@ -38,10 +38,10 @@ class ExamplePage extends StatelessWidget {
         child: SafeArea(
           child: Center(
               child: SleekCircularSlider(
-                child: Center(child: Text("Hi")),
+                innerWidget: (value) => Center(child: Text("Hi")),
             onChangeStart: (double value) {},
             onChangeEnd: (double value) {},
-            innerWidget: viewModel.innerWidget,
+            // innerWidget: viewModel.innerWidget,
             appearance: viewModel.appearance,
             min: viewModel.min,
             max: viewModel.max,
