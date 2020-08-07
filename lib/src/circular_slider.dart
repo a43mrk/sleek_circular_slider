@@ -24,6 +24,7 @@ class SleekCircularSlider extends StatefulWidget {
   final OnChange onChangeEnd;
   final InnerWidget innerWidget;
   final bool isDisabled;
+  final Widget child;
   static const defaultAppearance = CircularSliderAppearance();
 
   double get angle {
@@ -40,6 +41,7 @@ class SleekCircularSlider extends StatefulWidget {
       this.onChangeStart,
       this.onChangeEnd,
       this.innerWidget,
+      this.child,
       this.isDisabled = false})
       : assert(initialValue != null),
         assert(min != null),
@@ -224,10 +226,10 @@ class _SleekCircularSliderState extends State<SleekCircularSlider>
         child: Container(
             width: size.width,
             height: size.height,
-            child: _buildChildWidget()));
+            child: _buildChildWidget(child: widget.child)));
   }
 
-  Widget _buildChildWidget() {
+  Widget _buildChildWidget({Widget child}) {
     if (widget.appearance.spinnerMode) {
       return null;
     }
@@ -239,7 +241,11 @@ class _SleekCircularSliderState extends State<SleekCircularSlider>
             value: value,
             appearance: widget.appearance,
           );
-    return childWidget;
+    if(child != null){
+      return child;
+    } else {
+      return childWidget;
+    }
   }
 
   void _onPanUpdate(Offset details) {
