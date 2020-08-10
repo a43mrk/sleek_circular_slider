@@ -74,8 +74,10 @@ class _CurvePainter extends CustomPainter {
 
     Offset handler = degreesToCoordinates(
         Offset(size.width / 2 -2, size.height / 2 -2), -math.pi / 2 + startAngle + currentAngle + 1.5, radius - 3);
+    Offset handler2 = degreesToCoordinates(
+        Offset(size.width / 2 + 1, size.height / 2 + 1), -math.pi / 2 + startAngle + currentAngle + 1.5, radius - 5);
         /// circle at the end of pie
-        drawHandlerShadow(canvas: canvas, size: Size.fromRadius(appearance.handlerSize * 1.5), center: handler);
+        drawHandlerShadow(canvas: canvas, size: Size.fromRadius(appearance.handlerSize * 1.5), center: handler2);
         canvas.drawArc(Rect.fromCircle(center: handler, radius: appearance.handlerSize * 4), 0, math.pi * 2, false, dotPaint);
         canvas.drawCircle(handler, appearance.handlerSize * 1.5, dot2Paint);
         // canvas.drawCircle(handler, appearance.handlerSize, dotPaint);
@@ -121,8 +123,8 @@ class _CurvePainter extends CustomPainter {
     Path oval = Path()
         ..addOval(Rect.fromCircle(center: center, radius: size.width));
     Paint shadowPaint = Paint() 
-        ..color = Colors.black.withOpacity(0.9)
-        ..maskFilter = MaskFilter.blur(BlurStyle.normal, 8);
+        ..color = Colors.black.withOpacity(0.7)
+        ..maskFilter = MaskFilter.blur(BlurStyle.normal, 7);
     canvas.drawPath(oval, shadowPaint);
   }
 
