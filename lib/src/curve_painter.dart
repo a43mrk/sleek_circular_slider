@@ -27,6 +27,19 @@ class _CurvePainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = appearance.trackWidth
       ..color = appearance.trackColor;
+      // ..color = Colors.grey[200];
+
+    final trackPaint2 = Paint()
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = appearance.trackWidth * 1.04
+      ..color = Colors.black38;
+    drawCircularArcBorder(
+        canvas: canvas,
+        size: size,
+        paint: trackPaint2,
+        ignoreAngle: true,
+        spinnerMode: appearance.spinnerMode);
     drawCircularArc(
         canvas: canvas,
         size: size,
@@ -85,6 +98,23 @@ class _CurvePainter extends CustomPainter {
         paint);
   }
 
+  drawCircularArcBorder(
+      {@required Canvas canvas,
+      @required Size size,
+      @required Paint paint,
+      bool ignoreAngle = false,
+      bool spinnerMode = false}) {
+    final double angleValue = ignoreAngle ? 0 : (angleRange - angle);
+    final range = appearance.counterClockwise ? -angleRange : angleRange;
+    final currentAngle = appearance.counterClockwise ? angleValue : -angleValue;
+    canvas.drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        degreeToRadians(spinnerMode ? 0 : startAngle),
+        degreeToRadians(spinnerMode ? 360 : range + currentAngle),
+        false,
+        paint );
+  }
+
 
   drawHandlerShadow({@required Canvas canvas, @required Size size, Offset center}) {
     canvas.translate(size.width/2, size.height/2); 
@@ -127,6 +157,7 @@ class _CurvePainter extends CustomPainter {
     final opacityStep = maxOpacity / repetitions;
     final shadowPaint = Paint()
       ..strokeCap = StrokeCap.round
+      ..maskFilter = MaskFilter.blur(BlurStyle.normal, convertRadiusToSigma(3))
       ..style = PaintingStyle.stroke;
     for (int i = 1; i <= repetitions; i++) {
       shadowPaint.strokeWidth = appearance.progressBarWidth + i * shadowStep;
@@ -134,6 +165,10 @@ class _CurvePainter extends CustomPainter {
           .withOpacity(maxOpacity - (opacityStep * (i - 0.3)));
       drawCircularArc(canvas: canvas, size: size, paint: shadowPaint, ignoreAngle: true);
     }
+  }
+
+  static double convertRadiusToSigma(double radius) {
+      return radius * 0.57735 + 0.5;
   }
 
   @override
